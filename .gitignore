@@ -1,0 +1,4 @@
+/server/node_modules
+/client
+/server/.env
+notes.txt
