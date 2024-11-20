@@ -6,6 +6,6 @@ router.route('/').get(getAllUsers)
 router.route('/userProfile').get(getAUser)
 router.route('/meal/:mealId').delete(deleteAMeal)
 router.route('/:userId').get(getAUser)
-router.route('/:userId/meal').post(addMealToUser)
+router.route('/meal').post(addMealToUser)
 
 module.exports = router

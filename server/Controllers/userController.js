@@ -3,16 +3,49 @@ const Meal = require('../models/Meal')
 const jwt = require('jsonwebtoken')
 
 exports.addMealToUser = async (req, res) => {
-    try {
-        const { name, servings, calories, protein, carbohydrates, fiber, sugar } = req.body;
+    const {name,meals} = req.body
+    try{
+        const nameIsExists = await Meal.find({ name });
+        if (nameIsExists.length > 0) {
+            return res.status(409).json({
+                message: "Meal with this name already exists",
+                success: false
+            })
+        }
+        let calories = 0, servings = 0, protein = 0, carbohydrates = 0, fiber = 0, sugar = 0;
 
-        const newMeal = await Meal.create({ name, calories, servings, protein, carbohydrates, fiber, sugar });
+        meals.map(entry => {
+            calories += entry.meal.calories * entry.quantity
+            servings += entry.meal.servings  * entry.quantity
+            protein += entry.meal.protein
+            carbohydrates += entry.meal.carbohydrates
+            fiber += entry.meal.fiber
+            sugar += entry.meal.sugar
+        })
 
-        const updatedUser = await User.findByIdAndUpdate(req.params.userId , { $push: { meals: newMeal._id } }, { new: true });
+        const meal = await Meal.create({
+            name,
+            calories,
+            servings,
+            protein,
+            carbohydrates,
+            fiber,
+            sugar
+        });
 
-        res.status(201).json({ success: true, message: 'Meal added to user successfully', user: updatedUser });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error adding meal to user', error: error.message });
+        const auth = req.headers['authorization'];
+        const decodedUser = jwt.verify(auth, process.env.SECRET)
+        
+        await User.findOneAndUpdate({email: decodedUser.email},{
+            $push: {
+                meals: meal._id
+            }
+        })
+
+        return res.status(201).json({message:"created meal", success: true, meal})
+        
+    } catch(err){
+        return res.status(500).json({message:"error", success: false, error: err.message})
     }
 }
 
@@ -54,7 +87,7 @@ exports.deleteAMeal = async(req,res) =>{
             user._id,
             {
                 $pull: {
-                    meals: { _id: mealId }
+                    meals: mealId
                 }
             }
         )
