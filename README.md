@@ -33,13 +33,13 @@ Steps:
 ##### Set Environment Variables:
 
 Create a .env file in the folder and configure:
-`
-PORT=1337
+```
+PORT=1337 
 MONGO_PASSWORD=
 NUTRITION_API=https://api.calorieninjas.com/v1/nutrition?query=
 API_KEY=get from https://calorieninjas.com/api
 SECRET=
-`
+```
 Replace with appropriate values.
 
 ###### Start the Application:
@@ -49,17 +49,21 @@ Replace with appropriate values.
 Access the Application(API): Open your browser and navigate to http://localhost:1337. 
 
 ## Project Structure
-
+```
 Framework: Express.js
 Database: MongoDB
 Authentication: JWT
 Directory structure:
+```
+
+```
 server/
 ├── models/            # Mongoose models (User, Meal, DailyMeal)
 ├── routes/            # API endpoints (auth, meal, user, dailyMeal)
 ├── controllers/       # Business logic for routes
 ├── index.js           # Server entry point
 └── ...
+```
 
 ##### API Endpoints
 
