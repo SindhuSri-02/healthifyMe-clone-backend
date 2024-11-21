@@ -26,6 +26,7 @@ Git
 Steps:
 #### Clone the Repository:
 `git clone https://github.com/SindhuSri-02/healthifyMe-clone-backend.git`
+`cd server`
 
 ##### Install Dependencies:
 `npm install`
